@@ -1,271 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroLearn Elite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroLearn Elite</title>
+    <style>
+        :root {
+            --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+            --card: rgba(0,0,0,0.8);
+            --text: #ffffff;
+            --accent: #00ffff;
+            --success: #2ecc71;
+            --error: #e74c3c;
+        }
 
-<style>
-:root {
-    --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    --card: rgba(0,0,0,0.7);
-    --text: white;
-    --accent: #00ffff;
-}
+        .light {
+            --bg: #f4f7fa;
+            --card: #ffffff;
+            --text: #222;
+            --accent: #0077ff;
+        }
 
-.light {
-    --bg: #f4f7fa;
-    --card: white;
-    --text: #222;
-    --accent: #0077ff;
-}
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
-*{
-    box-sizing:border-box;
-}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            background-attachment: fixed;
+            color: var(--text);
+            transition: background 0.4s, color 0.4s;
+            line-height: 1.6;
+        }
 
-html {
-    scroll-behavior: smooth;
-}
+        /* NAVBAR */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 8%;
+            background: rgba(0,0,0,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
 
-body {
-    margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    transition:0.4s;
-}
+        .logo { font-size: 1.4rem; letter-spacing: 1px; }
 
-/* NAVBAR */
-nav {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 5%;
-    background:rgba(0,0,0,0.4);
-    position:sticky;
-    top:0;
-    backdrop-filter: blur(10px);
-    flex-wrap:wrap;
-}
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
 
-nav a {
-    color:var(--text);
-    text-decoration:none;
-    margin:0 10px;
-    font-weight:bold;
-}
+        nav a:hover { color: var(--accent); }
 
-nav button {
-    background:var(--accent);
-    border:none;
-    padding:6px 12px;
-    border-radius:6px;
-    cursor:pointer;
-}
+        .theme-btn {
+            background: var(--accent);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #000;
+        }
 
-/* HERO */
-header {
-    text-align:center;
-    padding:60px 20px 30px 20px;
-}
+        /* HERO */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
 
-h1 {
-    font-size:2.5rem;
-}
+        /* BRAIN SECTION */
+        .brain-section {
+            text-align: center;
+            padding: 20px;
+        }
 
-/* BRAIN SECTION */
-.brain-section {
-    text-align:center;
-    padding:40px 20px;
-}
+        .brain-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
 
-.brain-wrapper {
-    position:relative;
-    display:inline-block;
-    width:90%;
-    max-width:400px;
-}
+        .brain-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            filter: drop-shadow(0 0 15px rgba(0,255,255,0.2));
+        }
 
-.brain-wrapper img {
-    width:100%;
-    height:auto;
-    border-radius:20px;
-    box-shadow:0 0 30px var(--accent);
-    animation:glow 3s infinite alternate;
-}
+        /* HOTSPOTS */
+        .hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
 
-/* HOTSPOTS */
-.hotspot {
-    position:absolute;
-    width:18px;
-    height:18px;
-    background:var(--accent);
-    border-radius:50%;
-    cursor:pointer;
-    transform:translate(-50%, -50%);
-    animation:pulse 2s infinite;
-}
+        .tooltip {
+            position: absolute;
+            background: var(--card);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translate(-50%, -140%);
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--accent);
+        }
 
-.tooltip {
-    position:absolute;
-    background:var(--card);
-    padding:6px 10px;
-    border-radius:6px;
-    font-size:12px;
-    display:none;
-    transform:translate(-50%, -120%);
-    white-space:nowrap;
-}
+        .hotspot:hover + .tooltip {
+            opacity: 1;
+            transform: translate(-50%, -150%);
+        }
 
-.hotspot:hover + .tooltip {
-    display:block;
-}
+        /* INFO BOX */
+        .info-box {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
+            padding: 25px;
+            background: var(--card);
+            border-left: 5px solid var(--accent);
+            border-radius: 10px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-/* INFO BOX */
-.info-box {
-    margin:30px auto;
-    width:90%;
-    max-width:600px;
-    padding:20px;
-    background:var(--card);
-    border-radius:15px;
-    line-height:1.6;
-}
+        /* QUIZ */
+        .quiz {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 40px 20px;
+            background: var(--card);
+            border-radius: 20px;
+            text-align: center;
+        }
 
-/* QUIZ */
-.quiz {
-    text-align:center;
-    padding:40px 20px;
-}
+        .quiz button {
+            display: block;
+            margin: 12px auto;
+            padding: 14px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            width: 80%;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
 
-.quiz button {
-    display:block;
-    margin:10px auto;
-    padding:10px 18px;
-    border:none;
-    border-radius:8px;
-    background:var(--accent);
-    cursor:pointer;
-    width:90%;
-    max-width:300px;
-    font-weight:bold;
-}
+        .quiz button:hover:not(:disabled) {
+            background: var(--accent);
+            color: #000;
+        }
 
-.quiz button:hover {
-    opacity:0.9;
-}
+        .quiz button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-footer{
-    text-align:center;
-    padding:20px;
-    font-size:14px;
-    opacity:0.7;
-}
+        #result {
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
 
-/* ANIMATIONS */
-@keyframes pulse {
-    0%{box-shadow:0 0 0 0 var(--accent);}
-    70%{box-shadow:0 0 0 12px transparent;}
-    100%{box-shadow:0 0 0 0 transparent;}
-}
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0,255,255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,255,255, 0); }
+        }
 
-@keyframes glow {
-    from{box-shadow:0 0 20px var(--accent);}
-    to{box-shadow:0 0 50px var(--accent);}
-}
-
-/* MOBILE FIX */
-@media(max-width:600px){
-    nav {
-        flex-direction:column;
-        gap:10px;
-    }
-}
-</style>
+        @media(max-width:600px){
+            nav { flex-direction: column; gap: 15px; }
+            .quiz button { width: 100%; }
+        }
+    </style>
 </head>
-
 <body>
 
 <nav>
-<div><b>🧠 NeuroLearn</b></div>
-<div>
-<a href="#brain">Explore</a>
-<a href="#quiz">Quiz</a>
-<button onclick="toggleTheme()">Theme</button>
-</div>
+    <div class="logo"><b>🧠 NeuroLearn <span style="color:var(--accent)">Elite</span></b></div>
+    <div>
+        <a href="#brain">Explore</a>
+        <a href="#quiz">Quiz</a>
+        <button class="theme-btn" onclick="toggleTheme()">🌓 Theme</button>
+    </div>
 </nav>
 
 <header>
-<h1>Interactive Brain Learning Platform</h1>
-<p>Explore • Learn • Test Yourself</p>
+    <h1>Interactive Brain Anatomy</h1>
+    <p>Master the complexities of the human mind.</p>
 </header>
 
 <section id="brain" class="brain-section">
+    <div class="brain-wrapper">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Brain_human_lateral_view.png" alt="Human Brain Anatomy">
 
-<div class="brain-wrapper">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Brain_human_lateral_view.png" alt="Human Brain">
+        <div class="hotspot" style="top:35%; left:30%;" onclick="showInfo('frontal')"></div>
+        <div class="tooltip">Frontal Lobe</div>
 
-<!-- HOTSPOTS -->
-<div class="hotspot" style="top:30%;left:55%;" onclick="showInfo('frontal')"></div>
-<div class="tooltip" style="top:30%;left:55%;">Frontal Lobe</div>
+        <div class="hotspot" style="top:60%; left:50%;" onclick="showInfo('temporal')"></div>
+        <div class="tooltip">Temporal Lobe</div>
 
-<div class="hotspot" style="top:45%;left:70%;" onclick="showInfo('temporal')"></div>
-<div class="tooltip" style="top:45%;left:70%;">Temporal Lobe</div>
+        <div class="hotspot" style="top:80%; left:75%;" onclick="showInfo('cerebellum')"></div>
+        <div class="tooltip">Cerebellum</div>
+        
+        <div class="hotspot" style="top:30%; left:65%;" onclick="showInfo('parietal')"></div>
+        <div class="tooltip">Parietal Lobe</div>
+    </div>
 
-<div class="hotspot" style="top:60%;left:75%;" onclick="showInfo('cerebellum')"></div>
-<div class="tooltip" style="top:60%;left:75%;">Cerebellum</div>
-
-</div>
-
-<div class="info-box" id="info">
-Click a glowing point to learn about a brain part.
-</div>
-
+    <div class="info-box" id="info">
+        <p><i>Click a glowing node to reveal neural functions.</i></p>
+    </div>
 </section>
 
 <section id="quiz" class="quiz">
-<h2>Brain Quiz</h2>
+    <h2>Knowledge Check</h2>
+    <p id="question">Which part of the brain is primarily responsible for <b>balance and motor coordination</b>?</p>
 
-<p>Which part controls balance?</p>
+    <div id="quiz-options">
+        <button onclick="checkAnswer(this, false)">Frontal Lobe</button>
+        <button onclick="checkAnswer(this, true)">Cerebellum</button>
+        <button onclick="checkAnswer(this, false)">Temporal Lobe</button>
+    </div>
 
-<button onclick="checkAnswer('wrong')">Frontal Lobe</button>
-<button onclick="checkAnswer('correct')">Cerebellum</button>
-<button onclick="checkAnswer('wrong')">Temporal Lobe</button>
-
-<p id="result"></p>
-<p id="score">Score: 0</p>
+    <p id="result"></p>
+    <h3 id="score">Score: 0</h3>
+    <button id="reset-btn" style="display:none; background:var(--accent); color:#000;" onclick="resetQuiz()">Try Another Question?</button>
 </section>
 
 <footer>
-© 2026 NeuroLearn | Educational Project
+    © 2026 NeuroLearn Elite | Designed for Cognitive Excellence
 </footer>
 
 <script>
-let score=0;
+    let score = 0;
+    let hasAnswered = false;
 
-function showInfo(part){
-const data={
-frontal:"Frontal Lobe controls decision making, personality and voluntary movement.",
-temporal:"Temporal Lobe handles hearing and memory.",
-cerebellum:"Cerebellum controls balance and coordination."
-};
-document.getElementById("info").innerHTML=data[part];
-}
+    const brainData = {
+        frontal: "<strong>Frontal Lobe:</strong> The 'Executive Center'. Responsible for higher cognitive functions like decision-making, problem-solving, and voluntary muscle movement.",
+        temporal: "<strong>Temporal Lobe:</strong> The 'Auditory Hub'. Primary area for processing sensory input into derived meanings like appropriate retention of visual memory and language comprehension.",
+        cerebellum: "<strong>Cerebellum:</strong> The 'Little Brain'. Essential for maintaining posture, balance, and coordinating precision of movement.",
+        parietal: "<strong>Parietal Lobe:</strong> The 'Sensory Integrator'. Manages spatial sense and navigation, plus processing sensory information like touch and temperature."
+    };
 
-function checkAnswer(ans){
-if(ans==="correct"){
-score++;
-document.getElementById("result").innerHTML="✅ Correct!";
-}else{
-document.getElementById("result").innerHTML="❌ Try Again!";
-}
-document.getElementById("score").innerHTML="Score: "+score;
-}
+    function showInfo(part) {
+        const infoDiv = document.getElementById("info");
+        infoDiv.style.opacity = 0;
+        setTimeout(() => {
+            infoDiv.innerHTML = `<p>${brainData[part]}</p>`;
+            infoDiv.style.opacity = 1;
+        }, 200);
+    }
 
-function toggleTheme(){
-document.body.classList.toggle("light");
-}
+    function checkAnswer(btn, isCorrect) {
+        if (hasAnswered) return; // Prevent multiple clicks
+
+        const resultText = document.getElementById("result");
+        const buttons = document.querySelectorAll("#quiz-options button");
+
+        if (isCorrect) {
+            score++;
+            resultText.innerHTML = "✨ Excellent! That's correct.";
+            resultText.style.color = "var(--success)";
+            btn.style.background = "var(--success)";
+            btn.style.color = "white";
+        } else {
+            resultText.innerHTML = "❌ Not quite. The Cerebellum handles balance.";
+            resultText.style.color = "var(--error)";
+            btn.style.background = "var(--error)";
+            btn.style.color = "white";
+        }
+
+        // Disable all buttons after one is clicked
+        buttons.forEach(b => b.disabled = true);
+        document.getElementById("score").innerHTML = "Score: " + score;
+        hasAnswered = true;
+        document.getElementById("reset-btn").style.display = "block";
+    }
+
+    function resetQuiz() {
+        hasAnswered = false;
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("reset-btn").style.display = "none";
+        const buttons = document.querySelectorAll("#quiz-options button");
+        buttons.forEach(b => {
+            b.disabled = false;
+            b.style.background = "transparent";
+            b.style.color = "var(--text)";
+        });
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle("light");
+    }
 </script>
 
 </body>
