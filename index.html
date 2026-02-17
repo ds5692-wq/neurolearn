@@ -1,186 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroLearn Elite | Professional Edition</title>
-    <style>
-        :root {
-            --bg: #05070a;
-            --card: #0d1117;
-            --text: #f0f6fc;
-            --accent: #00d4ff;
-            --secondary: #30363d;
-            --success: #238636;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Human Brain Explorer</title>
 
-        .light {
-            --bg: #ffffff;
-            --card: #f6f8fa;
-            --text: #1f2328;
-            --accent: #0969da;
-        }
+<style>
+/* =========================
+   ROOT VARIABLES
+========================= */
+:root{
+    --primary:#0b3d91;
+    --secondary:#1565c0;
+    --light:#ffffff;
+    --bg:#f4f8fc;
+    --card:#ffffff;
+    --text:#1a1a1a;
+    --accent:#e3f2fd;
+}
 
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: 0.3s;
-        }
+/* DARK MODE */
+body.dark{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#f1f5f9;
+    --accent:#334155;
+}
 
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid var(--secondary);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-        .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
+body{
+    background:var(--bg);
+    color:var(--text);
+    transition:0.4s ease;
+}
 
-        .explorer-section {
-            max-width: 1100px; margin: 40px auto; text-align: center; padding: 20px;
-        }
+/* =========================
+   NAVBAR
+========================= */
+nav{
+    position:sticky;
+    top:0;
+    background:var(--primary);
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:1000;
+}
 
-        /* FIXED CONTAINER: Anchors hotspots to the image */
-        .image-container {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            max-width: 700px;
-            background: #000;
-            border-radius: 24px;
-            padding: 10px;
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
-            overflow: hidden;
-        }
+nav h1{
+    color:white;
+    font-size:20px;
+}
 
-        .image-container img {
-            width: 100%;
-            display: block;
-            border-radius: 15px;
-            transition: filter 0.5s;
-        }
+nav ul{
+    display:flex;
+    gap:15px;
+    list-style:none;
+}
 
-        .hotspot {
-            position: absolute;
-            width: 22px; height: 22px;
-            background: var(--accent);
-            border: 3px solid #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            z-index: 5;
-            box-shadow: 0 0 15px var(--accent);
-        }
+nav a{
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+}
 
-        .hotspot::after {
-            content: ''; position: absolute; top: 50%; left: 50%;
-            width: 100%; height: 100%; border-radius: 50%;
-            background: var(--accent); transform: translate(-50%, -50%);
-            animation: pulse 2s infinite;
-        }
+nav button{
+    padding:6px 10px;
+    border:none;
+    background:white;
+    cursor:pointer;
+    border-radius:5px;
+}
 
-        /* INFO PANEL */
-        .info-panel {
-            margin-top: 30px; padding: 35px;
-            background: var(--card); border-radius: 20px;
-            border-left: 6px solid var(--accent);
-            text-align: left; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            min-height: 180px;
-        }
+/* =========================
+   SECTIONS
+========================= */
+section{
+    padding:60px 20px;
+    max-width:1200px;
+    margin:auto;
+    opacity:0;
+    transform:translateY(40px);
+    transition:0.8s;
+}
 
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
-        }
+section.visible{
+    opacity:1;
+    transform:translateY(0);
+}
 
-        .btn {
-            background: var(--accent); color: #000; border: none;
-            padding: 10px 20px; border-radius: 8px; font-weight: 600;
-            cursor: pointer; transition: 0.2s;
-        }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    </style>
+h2{
+    margin-bottom:20px;
+    color:var(--secondary);
+}
+
+.card{
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+img{
+    width:100%;
+    max-height:300px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+/* =========================
+   BRAIN DIAGRAM
+========================= */
+.diagram{
+    position:relative;
+    max-width:500px;
+    margin:40px auto;
+}
+
+.brain-shape{
+    width:100%;
+    height:300px;
+    background:linear-gradient(to right,#90caf9,#42a5f5);
+    border-radius:50%;
+    position:relative;
+}
+
+.region{
+    position:absolute;
+    padding:10px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.4);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.region:hover{
+    background:yellow;
+}
+
+.tooltip{
+    position:absolute;
+    background:black;
+    color:white;
+    padding:5px 8px;
+    border-radius:5px;
+    font-size:12px;
+    display:none;
+}
+
+.region:hover .tooltip{
+    display:block;
+}
+
+/* =========================
+   QUIZ
+========================= */
+.quiz-container{
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+}
+
+.option{
+    display:block;
+    margin:8px 0;
+    padding:8px;
+    background:var(--accent);
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.progress{
+    height:10px;
+    background:#ddd;
+    border-radius:5px;
+    margin-bottom:10px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:var(--secondary);
+    border-radius:5px;
+}
+
+footer{
+    background:var(--primary);
+    color:white;
+    padding:20px;
+    text-align:center;
+    margin-top:40px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:768px){
+    nav ul{display:none;}
+}
+</style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">🧠 NeuroLearn Elite</div>
-    <button class="btn" onclick="document.body.classList.toggle('light')">Theme</button>
+<h1>The Human Brain Explorer</h1>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#cerebrum">Cerebrum</a></li>
+<li><a href="#lobes">Lobes</a></li>
+<li><a href="#brainstem">Brainstem</a></li>
+<li><a href="#quiz">Quiz</a></li>
+</ul>
+<button onclick="toggleDark()">🌙</button>
 </nav>
 
-<section class="explorer-section">
-    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Deep Brain Explorer</h1>
-    <p style="color: var(--secondary); margin-bottom: 40px;">Select a neural region to analyze its specific cognitive functions.</p>
+<section id="overview">
+<h2>Interactive Brain Diagram</h2>
+<div class="diagram">
+<div class="brain-shape">
 
-    <div class="image-container" id="brainContainer">
-        <img id="brainImg" src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=1000" 
-             alt="3D Brain Anatomy" onerror="handleImageError()">
+<div class="region" style="top:40%;left:20%;">
+<div class="tooltip">Frontal Lobe</div>
+</div>
 
-        <div class="hotspot" style="top: 32%; left: 28%;" onclick="updateInfo('frontal')"></div>
-        <div class="hotspot" style="top: 25%; left: 62%;" onclick="updateInfo('parietal')"></div>
-        <div class="hotspot" style="top: 55%; left: 82%;" onclick="updateInfo('occipital')"></div>
-        <div class="hotspot" style="top: 60%; left: 45%;" onclick="updateInfo('temporal')"></div>
-        <div class="hotspot" style="top: 80%; left: 78%;" onclick="updateInfo('cerebellum')"></div>
-        <div class="hotspot" style="top: 88%; left: 58%;" onclick="updateInfo('brainstem')"></div>
-    </div>
+<div class="region" style="top:30%;left:60%;">
+<div class="tooltip">Parietal Lobe</div>
+</div>
 
-    <div class="info-panel" id="infoPanel">
-        <h2 style="color: var(--accent); margin-top: 0;">System Ready</h2>
-        <p>Please click a pulsating node on the brain model to initiate anatomical data retrieval.</p>
-    </div>
+<div class="region" style="top:60%;left:60%;">
+<div class="tooltip">Temporal Lobe</div>
+</div>
+
+<div class="region" style="top:40%;left:75%;">
+<div class="tooltip">Occipital Lobe</div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/800x300" alt="Anatomical illustration of the human brain overview">
+<p>
+The human brain is the central organ of the nervous system and serves as the command center for the entire body. Weighing approximately 1.3 to 1.4 kilograms in adults, it contains nearly 86 billion neurons interconnected through trillions of synapses. The brain is divided into major regions including the cerebrum, cerebellum, and brainstem, each responsible for specific physiological and cognitive functions. Protected by the skull and cushioned by cerebrospinal fluid, the brain operates through complex electrochemical signaling. It regulates voluntary actions such as movement and speech, as well as involuntary processes like breathing, heart rate, and hormonal balance.
+Clinically, damage to different areas results in distinct neurological deficits, allowing physicians to localize injuries or diseases. Disorders such as stroke, traumatic brain injury, epilepsy, Parkinson’s disease, and Alzheimer’s disease highlight the importance of brain integrity. The brain’s remarkable plasticity enables adaptation and learning throughout life. Interestingly, despite consuming only about 20% of the body’s energy, the brain never rests—even during sleep, it actively processes memory and maintains vital systems.
+</p>
+</div>
 </section>
 
+<section id="cerebrum">
+<h2>Cerebrum</h2>
+<div class="card">
+<img src="https://via.placeholder.com/800x300" alt="Labeled diagram of the cerebrum in the human brain">
+<p>
+The cerebrum is the largest and most complex portion of the human brain, accounting for nearly 85% of total brain mass. It is divided into two hemispheres connected by the corpus callosum. Structurally, the outer layer known as the cerebral cortex consists of gray matter composed of neuron cell bodies, while underlying white matter contains myelinated axons that facilitate communication. The surface appears folded into gyri and sulci, increasing surface area for higher cognitive processing.
+Functionally, the cerebrum is responsible for voluntary movement, reasoning, language, emotion, perception, and decision-making. Each hemisphere controls the opposite side of the body. The left hemisphere is generally dominant for language and analytical tasks, whereas the right hemisphere contributes to spatial awareness and creativity.
+Clinically, cerebrum damage can lead to paralysis, speech disorders such as aphasia, memory loss, or personality changes. Strokes commonly affect cerebral arteries, disrupting blood supply and causing localized brain injury. Interestingly, despite lateralization, both hemispheres constantly communicate, allowing integrated and coordinated behavior.
+</p>
+</div>
+</section>
+
+<section id="lobes">
+<h2>Brain Lobes</h2>
+<div class="card">
+<img src="https://via.placeholder.com/800x300" alt="Diagram showing frontal, parietal, temporal, and occipital lobes">
+<p>
+The cerebrum is subdivided into four major lobes: frontal, parietal, temporal, and occipital. The frontal lobe, located at the front of the brain, governs executive functions, personality, planning, and voluntary motor activity. The parietal lobe processes sensory information including touch, temperature, and spatial awareness. The temporal lobe, positioned laterally, plays a vital role in auditory processing, language comprehension, and memory formation. The occipital lobe at the back of the brain specializes in visual processing.
+Damage to specific lobes produces predictable clinical outcomes. Frontal lobe injury may result in impaired judgment and behavioral changes. Parietal damage can cause loss of spatial orientation. Temporal lobe dysfunction may affect memory and hearing, while occipital injury leads to visual disturbances.
+An interesting fact is that the frontal lobe continues developing into early adulthood, explaining changes in decision-making maturity during adolescence.
+</p>
+</div>
+</section>
+
+<section id="brainstem">
+<h2>Brainstem</h2>
+<div class="card">
+<img src="https://via.placeholder.com/800x300" alt="Anatomical diagram of midbrain, pons, and medulla oblongata">
+<p>
+The brainstem consists of the midbrain, pons, and medulla oblongata. It connects the brain to the spinal cord and regulates essential life-sustaining functions. The midbrain coordinates visual and auditory reflexes. The pons acts as a bridge relaying signals between cerebrum and cerebellum. The medulla oblongata controls respiration, heart rate, and blood pressure.
+Clinically, brainstem damage is life-threatening because it can disrupt breathing and cardiac regulation. Conditions such as brainstem stroke or tumors may result in coma or locked-in syndrome.
+Despite its small size compared to the cerebrum, the brainstem is crucial for survival, highlighting its fundamental role in autonomic control.
+</p>
+</div>
+</section>
+
+<section id="quiz">
+<h2>Brain Knowledge Quiz</h2>
+<div class="quiz-container">
+<div id="bestScore"></div>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div id="timer">Time: 60</div>
+<h3 id="question"></h3>
+<div id="options"></div>
+<div id="feedback"></div>
+<button onclick="nextQuestion()">Next</button>
+<button onclick="retakeQuiz()">Retake Quiz</button>
+</div>
+</section>
+
+<footer>
+<p>© 2026 The Human Brain Explorer | Educational References Placeholder</p>
+</footer>
+
 <script>
-    const neuralData = {
-        frontal: {
-            t: "Frontal Lobe",
-            d: "The brain's 'Command Center'. Responsible for higher-level cognitive skills such as planning, reasoning, emotions, and personality. It also contains the Motor Cortex, which governs voluntary movement."
-        },
-        parietal: {
-            t: "Parietal Lobe",
-            d: "The 'Sensory Integrator'. It processes information about touch, taste, and temperature. It is also crucial for spatial awareness—knowing where your body is in space."
-        },
-        occipital: {
-            t: "Occipital Lobe",
-            d: "The 'Visual Processing Center'. Located at the rear, it decodes signals from your eyes to interpret shapes, colors, and motion. Without it, you could see but not understand what you're looking at."
-        },
-        temporal: {
-            t: "Temporal Lobe",
-            d: "The 'Auditory and Memory Hub'. It processes sound and language. It's home to the Hippocampus, which acts like a hard drive for creating and storing long-term memories."
-        },
-        cerebellum: {
-            t: "Cerebellum",
-            d: "Commonly called the 'Little Brain'. It contains more than half of your brain's neurons. Its main job is to coordinate precision, timing, and balance for smooth motor actions."
-        },
-        brainstem: {
-            t: "Brainstem",
-            d: "The 'Life Support System'. It connects the brain to the spinal cord. It controls automatic survival functions like your heartbeat, breathing, and sleep cycles."
+/* =========================
+   DARK MODE
+========================= */
+function toggleDark(){
+    document.body.classList.toggle("dark");
+    localStorage.setItem("theme",document.body.classList.contains("dark"));
+}
+
+if(localStorage.getItem("theme")==="true"){
+    document.body.classList.add("dark");
+}
+
+/* =========================
+   SECTION ANIMATION
+========================= */
+const sections=document.querySelectorAll("section");
+window.addEventListener("scroll",()=>{
+    sections.forEach(sec=>{
+        const top=sec.getBoundingClientRect().top;
+        if(top<window.innerHeight-100){
+            sec.classList.add("visible");
         }
-    };
+    });
+});
 
-    function updateInfo(key) {
-        const info = neuralData[key];
-        const panel = document.getElementById('infoPanel');
-        panel.style.opacity = '0';
-        setTimeout(() => {
-            panel.innerHTML = `
-                <h2 style="color: var(--accent); margin-top: 0; font-size: 1.8rem;">${info.t}</h2>
-                <p style="font-size: 1.1rem; line-height: 1.8;">${info.d}</p>
-            `;
-            panel.style.opacity = '1';
-        }, 200);
-    }
+/* =========================
+   QUIZ
+========================= */
+const quizData=[
+{q:"Largest part of brain?",a:["Cerebrum","Cerebellum","Pons","Medulla"],c:0},
+{q:"Controls balance?",a:["Cerebellum","Frontal","Temporal","Thalamus"],c:0},
+{q:"Visual processing?",a:["Occipital","Parietal","Frontal","Pons"],c:0},
+{q:"Heart rate control?",a:["Medulla","Frontal","Cerebrum","Temporal"],c:0},
+{q:"Language production area mostly in?",a:["Left hemisphere","Right hemisphere","Pons","Cerebellum"],c:0},
+{q:"Connects hemispheres?",a:["Corpus Callosum","Thalamus","Pituitary","Hypothalamus"],c:0},
+{q:"Auditory processing?",a:["Temporal","Occipital","Parietal","Midbrain"],c:0},
+{q:"Executive functions?",a:["Frontal","Temporal","Occipital","Pons"],c:0},
+{q:"Relays sensory signals?",a:["Thalamus","Medulla","Frontal","Cerebellum"],c:0},
+{q:"Hormone regulation center?",a:["Hypothalamus","Occipital","Parietal","Pons"],c:0},
+{q:"Motor coordination?",a:["Cerebellum","Thalamus","Temporal","Occipital"],c:0},
+{q:"Brain weight approx?",a:["1.3kg","5kg","500g","3kg"],c:0},
+{q:"Controls breathing?",a:["Medulla","Frontal","Temporal","Parietal"],c:0},
+{q:"Visual reflex center?",a:["Midbrain","Frontal","Temporal","Occipital"],c:0},
+{q:"Number of neurons approx?",a:["86 billion","1 million","5 billion","100 thousand"],c:0}
+];
 
-    function handleImageError() {
-        // Hides all hotspots if the image fails to load so it doesn't look messy
-        const hotspots = document.querySelectorAll('.hotspot');
-        hotspots.forEach(h => h.style.display = 'none');
-        document.getElementById('infoPanel').innerHTML = "<h2>Image Load Error</h2><p>Please check your internet connection or refresh the page.</p>";
+let current=0;
+let score=0;
+let time=60;
+let timer;
+
+function loadQuestion(){
+    document.getElementById("question").innerText=
+    (current+1)+". "+quizData[current].q;
+
+    const optionsDiv=document.getElementById("options");
+    optionsDiv.innerHTML="";
+    quizData[current].a.forEach((opt,i)=>{
+        const btn=document.createElement("div");
+        btn.className="option";
+        btn.innerText=opt;
+        btn.onclick=()=>checkAnswer(i);
+        optionsDiv.appendChild(btn);
+    });
+
+    document.getElementById("progressBar").style.width=
+    ((current)/quizData.length)*100+"%";
+}
+
+function checkAnswer(i){
+    if(i===quizData[current].c){
+        score++;
+        document.getElementById("feedback").innerText="Correct!";
+    }else{
+        document.getElementById("feedback").innerText="Incorrect!";
     }
+}
+
+function nextQuestion(){
+    current++;
+    if(current<quizData.length){
+        loadQuestion();
+    }else{
+        endQuiz();
+    }
+}
+
+function endQuiz(){
+    clearInterval(timer);
+    document.getElementById("question").innerText=
+    "Final Score: "+score+"/"+quizData.length;
+
+    let message="Needs Improvement";
+    if(score>12)message="Excellent!";
+    else if(score>8)message="Good!";
+
+    document.getElementById("feedback").innerText=message;
+
+    let best=localStorage.getItem("bestScore")||0;
+    if(score>best){
+        localStorage.setItem("bestScore",score);
+        best=score;
+    }
+    document.getElementById("bestScore").innerText=
+    "Best Score: "+best;
+}
+
+function retakeQuiz(){
+    current=0;
+    score=0;
+    time=60;
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer(){
+    clearInterval(timer);
+    timer=setInterval(()=>{
+        time--;
+        document.getElementById("timer").innerText="Time: "+time;
+        if(time<=0)endQuiz();
+    },1000);
+}
+
+loadQuestion();
+startTimer();
+
+document.getElementById("bestScore").innerText=
+"Best Score: "+(localStorage.getItem("bestScore")||0);
+
 </script>
-
 </body>
 </html>
