@@ -6,25 +6,28 @@
 <title>The Human Brain Explorer</title>
 
 <style>
-/* =========================
-   ROOT VARIABLES
-========================= */
+
+/* ===============================
+   ROOT DESIGN SYSTEM
+================================ */
 :root{
     --primary:#0b3d91;
     --secondary:#1565c0;
-    --light:#ffffff;
-    --bg:#f4f8fc;
+    --accent:#e3f2fd;
+    --background:#f4f8fc;
     --card:#ffffff;
     --text:#1a1a1a;
-    --accent:#e3f2fd;
+    --shadow:0 8px 25px rgba(0,0,0,0.08);
+    --radius:14px;
 }
 
 /* DARK MODE */
 body.dark{
-    --bg:#0f172a;
+    --background:#0f172a;
     --card:#1e293b;
     --text:#f1f5f9;
     --accent:#334155;
+    --shadow:0 8px 25px rgba(0,0,0,0.4);
 }
 
 *{
@@ -32,37 +35,39 @@ body.dark{
     padding:0;
     box-sizing:border-box;
     scroll-behavior:smooth;
-    font-family: 'Segoe UI', sans-serif;
 }
 
 body{
-    background:var(--bg);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background:var(--background);
     color:var(--text);
     transition:0.4s ease;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* ===============================
+   NAVIGATION
+================================ */
 nav{
     position:sticky;
     top:0;
     background:var(--primary);
-    padding:15px;
+    padding:16px 30px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
 }
 
 nav h1{
     color:white;
     font-size:20px;
+    letter-spacing:1px;
 }
 
 nav ul{
     display:flex;
-    gap:15px;
+    gap:20px;
     list-style:none;
 }
 
@@ -70,26 +75,31 @@ nav a{
     color:white;
     text-decoration:none;
     font-size:14px;
+    opacity:0.9;
 }
 
-nav button{
-    padding:6px 10px;
-    border:none;
+nav a:hover{
+    opacity:1;
+}
+
+.toggle-btn{
     background:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:20px;
     cursor:pointer;
-    border-radius:5px;
 }
 
-/* =========================
-   SECTIONS
-========================= */
+/* ===============================
+   GENERAL SECTION STYLE
+================================ */
 section{
-    padding:60px 20px;
     max-width:1200px;
     margin:auto;
+    padding:80px 20px;
     opacity:0;
     transform:translateY(40px);
-    transition:0.8s;
+    transition:0.8s ease;
 }
 
 section.visible{
@@ -98,240 +108,229 @@ section.visible{
 }
 
 h2{
-    margin-bottom:20px;
+    text-align:center;
+    margin-bottom:40px;
+    font-size:32px;
     color:var(--secondary);
+}
+
+/* ===============================
+   CARD SYSTEM
+================================ */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:30px;
 }
 
 .card{
     background:var(--card);
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom:20px;
-    transition:0.3s;
+    padding:25px;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    transition:0.3s ease;
 }
 
 .card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-6px);
 }
 
-img{
+.card img{
     width:100%;
-    max-height:300px;
+    height:220px;
     object-fit:cover;
-    border-radius:10px;
+    border-radius:12px;
     margin-bottom:15px;
 }
 
-/* =========================
-   BRAIN DIAGRAM
-========================= */
-.diagram{
-    position:relative;
-    max-width:500px;
-    margin:40px auto;
+.card h3{
+    margin-bottom:10px;
+    color:var(--primary);
 }
 
-.brain-shape{
-    width:100%;
-    height:300px;
-    background:linear-gradient(to right,#90caf9,#42a5f5);
-    border-radius:50%;
-    position:relative;
+.card p{
+    font-size:14px;
+    line-height:1.7;
 }
 
-.region{
-    position:absolute;
-    padding:10px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.4);
+/* ===============================
+   HERO / DIAGRAM SECTION
+================================ */
+.hero{
+    text-align:center;
+    padding-top:100px;
+}
+
+.hero h2{
+    margin-bottom:20px;
+}
+
+.diagram-container{
+    display:flex;
+    justify-content:center;
+    margin-top:40px;
+}
+
+svg{
+    width:600px;
+    max-width:100%;
     cursor:pointer;
+}
+
+.brain-region{
+    fill:#90caf9;
+    stroke:#0b3d91;
+    stroke-width:2;
     transition:0.3s;
 }
 
-.region:hover{
-    background:yellow;
+.brain-region:hover{
+    fill:#ffcc00;
+    filter:drop-shadow(0 0 8px rgba(255,204,0,0.7));
 }
 
+/* Tooltip */
 .tooltip{
     position:absolute;
     background:black;
     color:white;
-    padding:5px 8px;
-    border-radius:5px;
-    font-size:12px;
-    display:none;
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:13px;
+    pointer-events:none;
+    opacity:0;
+    transition:0.2s;
 }
 
-.region:hover .tooltip{
-    display:block;
-}
-
-/* =========================
-   QUIZ
-========================= */
-.quiz-container{
-    background:var(--card);
-    padding:20px;
-    border-radius:10px;
-}
-
-.option{
-    display:block;
-    margin:8px 0;
-    padding:8px;
-    background:var(--accent);
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.progress{
-    height:10px;
-    background:#ddd;
-    border-radius:5px;
-    margin-bottom:10px;
-}
-
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:var(--secondary);
-    border-radius:5px;
-}
-
+/* ===============================
+   FOOTER
+================================ */
 footer{
     background:var(--primary);
     color:white;
-    padding:20px;
     text-align:center;
-    margin-top:40px;
+    padding:30px 20px;
+    margin-top:80px;
 }
 
-/* =========================
+footer p{
+    opacity:0.8;
+    font-size:13px;
+}
+
+/* ===============================
    RESPONSIVE
-========================= */
+================================ */
 @media(max-width:768px){
     nav ul{display:none;}
+    h2{font-size:26px;}
 }
+
 </style>
 </head>
 <body>
 
+<!-- ===============================
+     NAVIGATION
+================================ -->
 <nav>
-<h1>The Human Brain Explorer</h1>
+<h1>Human Brain Explorer</h1>
 <ul>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#cerebrum">Cerebrum</a></li>
-<li><a href="#lobes">Lobes</a></li>
-<li><a href="#brainstem">Brainstem</a></li>
+<li><a href="#brain">Brain Diagram</a></li>
+<li><a href="#structures">Structures</a></li>
 <li><a href="#quiz">Quiz</a></li>
 </ul>
-<button onclick="toggleDark()">🌙</button>
+<button class="toggle-btn" onclick="toggleDark()">🌙</button>
 </nav>
 
-<section id="overview">
-<h2>Interactive Brain Diagram</h2>
-<div class="diagram">
-<div class="brain-shape">
+<!-- ===============================
+     HERO + INTERACTIVE BRAIN
+================================ -->
+<section id="brain" class="hero">
+<h2>Interactive Human Brain Diagram</h2>
+<p>Hover over regions to identify structures. Click to explore detailed explanations below.</p>
 
-<div class="region" style="top:40%;left:20%;">
-<div class="tooltip">Frontal Lobe</div>
+<div class="diagram-container">
+
+<svg viewBox="0 0 600 400">
+
+<!-- Frontal -->
+<ellipse class="brain-region" cx="200" cy="200" rx="120" ry="140"
+onclick="scrollToSection('frontal')" 
+onmousemove="showTooltip(event,'Frontal Lobe')" 
+onmouseout="hideTooltip()"/>
+
+<!-- Parietal -->
+<ellipse class="brain-region" cx="320" cy="160" rx="100" ry="110"
+onclick="scrollToSection('parietal')" 
+onmousemove="showTooltip(event,'Parietal Lobe')" 
+onmouseout="hideTooltip()"/>
+
+<!-- Temporal -->
+<ellipse class="brain-region" cx="320" cy="270" rx="120" ry="80"
+onclick="scrollToSection('temporal')" 
+onmousemove="showTooltip(event,'Temporal Lobe')" 
+onmouseout="hideTooltip()"/>
+
+<!-- Occipital -->
+<ellipse class="brain-region" cx="450" cy="200" rx="80" ry="100"
+onclick="scrollToSection('occipital')" 
+onmousemove="showTooltip(event,'Occipital Lobe')" 
+onmouseout="hideTooltip()"/>
+
+</svg>
+
 </div>
 
-<div class="region" style="top:30%;left:60%;">
-<div class="tooltip">Parietal Lobe</div>
-</div>
+<div class="tooltip" id="tooltip"></div>
+</section>
 
-<div class="region" style="top:60%;left:60%;">
-<div class="tooltip">Temporal Lobe</div>
-</div>
+<!-- ===============================
+     STRUCTURES CONTAINER
+================================ -->
+<section id="structures">
+<h2>Major Brain Structures</h2>
+<div class="grid">
 
-<div class="region" style="top:40%;left:75%;">
-<div class="tooltip">Occipital Lobe</div>
-</div>
+<!-- PART 2 WILL INSERT FULL CONTENT HERE -->
 
-</div>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/800x300" alt="Anatomical illustration of the human brain overview">
-<p>
-The human brain is the central organ of the nervous system and serves as the command center for the entire body. Weighing approximately 1.3 to 1.4 kilograms in adults, it contains nearly 86 billion neurons interconnected through trillions of synapses. The brain is divided into major regions including the cerebrum, cerebellum, and brainstem, each responsible for specific physiological and cognitive functions. Protected by the skull and cushioned by cerebrospinal fluid, the brain operates through complex electrochemical signaling. It regulates voluntary actions such as movement and speech, as well as involuntary processes like breathing, heart rate, and hormonal balance.
-Clinically, damage to different areas results in distinct neurological deficits, allowing physicians to localize injuries or diseases. Disorders such as stroke, traumatic brain injury, epilepsy, Parkinson’s disease, and Alzheimer’s disease highlight the importance of brain integrity. The brain’s remarkable plasticity enables adaptation and learning throughout life. Interestingly, despite consuming only about 20% of the body’s energy, the brain never rests—even during sleep, it actively processes memory and maintains vital systems.
-</p>
 </div>
 </section>
 
-<section id="cerebrum">
-<h2>Cerebrum</h2>
-<div class="card">
-<img src="https://via.placeholder.com/800x300" alt="Labeled diagram of the cerebrum in the human brain">
-<p>
-The cerebrum is the largest and most complex portion of the human brain, accounting for nearly 85% of total brain mass. It is divided into two hemispheres connected by the corpus callosum. Structurally, the outer layer known as the cerebral cortex consists of gray matter composed of neuron cell bodies, while underlying white matter contains myelinated axons that facilitate communication. The surface appears folded into gyri and sulci, increasing surface area for higher cognitive processing.
-Functionally, the cerebrum is responsible for voluntary movement, reasoning, language, emotion, perception, and decision-making. Each hemisphere controls the opposite side of the body. The left hemisphere is generally dominant for language and analytical tasks, whereas the right hemisphere contributes to spatial awareness and creativity.
-Clinically, cerebrum damage can lead to paralysis, speech disorders such as aphasia, memory loss, or personality changes. Strokes commonly affect cerebral arteries, disrupting blood supply and causing localized brain injury. Interestingly, despite lateralization, both hemispheres constantly communicate, allowing integrated and coordinated behavior.
-</p>
-</div>
-</section>
-
-<section id="lobes">
-<h2>Brain Lobes</h2>
-<div class="card">
-<img src="https://via.placeholder.com/800x300" alt="Diagram showing frontal, parietal, temporal, and occipital lobes">
-<p>
-The cerebrum is subdivided into four major lobes: frontal, parietal, temporal, and occipital. The frontal lobe, located at the front of the brain, governs executive functions, personality, planning, and voluntary motor activity. The parietal lobe processes sensory information including touch, temperature, and spatial awareness. The temporal lobe, positioned laterally, plays a vital role in auditory processing, language comprehension, and memory formation. The occipital lobe at the back of the brain specializes in visual processing.
-Damage to specific lobes produces predictable clinical outcomes. Frontal lobe injury may result in impaired judgment and behavioral changes. Parietal damage can cause loss of spatial orientation. Temporal lobe dysfunction may affect memory and hearing, while occipital injury leads to visual disturbances.
-An interesting fact is that the frontal lobe continues developing into early adulthood, explaining changes in decision-making maturity during adolescence.
-</p>
-</div>
-</section>
-
-<section id="brainstem">
-<h2>Brainstem</h2>
-<div class="card">
-<img src="https://via.placeholder.com/800x300" alt="Anatomical diagram of midbrain, pons, and medulla oblongata">
-<p>
-The brainstem consists of the midbrain, pons, and medulla oblongata. It connects the brain to the spinal cord and regulates essential life-sustaining functions. The midbrain coordinates visual and auditory reflexes. The pons acts as a bridge relaying signals between cerebrum and cerebellum. The medulla oblongata controls respiration, heart rate, and blood pressure.
-Clinically, brainstem damage is life-threatening because it can disrupt breathing and cardiac regulation. Conditions such as brainstem stroke or tumors may result in coma or locked-in syndrome.
-Despite its small size compared to the cerebrum, the brainstem is crucial for survival, highlighting its fundamental role in autonomic control.
-</p>
-</div>
-</section>
-
+<!-- ===============================
+     QUIZ PLACEHOLDER
+================================ -->
 <section id="quiz">
-<h2>Brain Knowledge Quiz</h2>
-<div class="quiz-container">
-<div id="bestScore"></div>
-<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-<div id="timer">Time: 60</div>
-<h3 id="question"></h3>
-<div id="options"></div>
-<div id="feedback"></div>
-<button onclick="nextQuestion()">Next</button>
-<button onclick="retakeQuiz()">Retake Quiz</button>
+<h2>Brain Knowledge Assessment</h2>
+
+<div id="quiz-container">
+<!-- PART 3 WILL INSERT FULL QUIZ HERE -->
 </div>
+
 </section>
 
 <footer>
-<p>© 2026 The Human Brain Explorer | Educational References Placeholder</p>
+<p>© 2026 Human Brain Explorer | Educational Content for Academic Learning</p>
 </footer>
 
 <script>
-/* =========================
+
+/* ===============================
    DARK MODE
-========================= */
+================================ */
 function toggleDark(){
     document.body.classList.toggle("dark");
-    localStorage.setItem("theme",document.body.classList.contains("dark"));
+    localStorage.setItem("theme",
+        document.body.classList.contains("dark"));
 }
 
 if(localStorage.getItem("theme")==="true"){
     document.body.classList.add("dark");
 }
 
-/* =========================
-   SECTION ANIMATION
-========================= */
+/* ===============================
+   SCROLL ANIMATION
+================================ */
 const sections=document.querySelectorAll("section");
 window.addEventListener("scroll",()=>{
     sections.forEach(sec=>{
@@ -342,111 +341,402 @@ window.addEventListener("scroll",()=>{
     });
 });
 
-/* =========================
-   QUIZ
-========================= */
-const quizData=[
-{q:"Largest part of brain?",a:["Cerebrum","Cerebellum","Pons","Medulla"],c:0},
-{q:"Controls balance?",a:["Cerebellum","Frontal","Temporal","Thalamus"],c:0},
-{q:"Visual processing?",a:["Occipital","Parietal","Frontal","Pons"],c:0},
-{q:"Heart rate control?",a:["Medulla","Frontal","Cerebrum","Temporal"],c:0},
-{q:"Language production area mostly in?",a:["Left hemisphere","Right hemisphere","Pons","Cerebellum"],c:0},
-{q:"Connects hemispheres?",a:["Corpus Callosum","Thalamus","Pituitary","Hypothalamus"],c:0},
-{q:"Auditory processing?",a:["Temporal","Occipital","Parietal","Midbrain"],c:0},
-{q:"Executive functions?",a:["Frontal","Temporal","Occipital","Pons"],c:0},
-{q:"Relays sensory signals?",a:["Thalamus","Medulla","Frontal","Cerebellum"],c:0},
-{q:"Hormone regulation center?",a:["Hypothalamus","Occipital","Parietal","Pons"],c:0},
-{q:"Motor coordination?",a:["Cerebellum","Thalamus","Temporal","Occipital"],c:0},
-{q:"Brain weight approx?",a:["1.3kg","5kg","500g","3kg"],c:0},
-{q:"Controls breathing?",a:["Medulla","Frontal","Temporal","Parietal"],c:0},
-{q:"Visual reflex center?",a:["Midbrain","Frontal","Temporal","Occipital"],c:0},
-{q:"Number of neurons approx?",a:["86 billion","1 million","5 billion","100 thousand"],c:0}
-];
+/* ===============================
+   TOOLTIP
+================================ */
+const tooltip=document.getElementById("tooltip");
 
-let current=0;
-let score=0;
-let time=60;
-let timer;
-
-function loadQuestion(){
-    document.getElementById("question").innerText=
-    (current+1)+". "+quizData[current].q;
-
-    const optionsDiv=document.getElementById("options");
-    optionsDiv.innerHTML="";
-    quizData[current].a.forEach((opt,i)=>{
-        const btn=document.createElement("div");
-        btn.className="option";
-        btn.innerText=opt;
-        btn.onclick=()=>checkAnswer(i);
-        optionsDiv.appendChild(btn);
-    });
-
-    document.getElementById("progressBar").style.width=
-    ((current)/quizData.length)*100+"%";
+function showTooltip(e,text){
+    tooltip.innerText=text;
+    tooltip.style.left=e.pageX+10+"px";
+    tooltip.style.top=e.pageY+10+"px";
+    tooltip.style.opacity=1;
 }
 
-function checkAnswer(i){
-    if(i===quizData[current].c){
-        score++;
-        document.getElementById("feedback").innerText="Correct!";
-    }else{
-        document.getElementById("feedback").innerText="Incorrect!";
-    }
+function hideTooltip(){
+    tooltip.style.opacity=0;
 }
 
-function nextQuestion(){
-    current++;
-    if(current<quizData.length){
-        loadQuestion();
-    }else{
-        endQuiz();
-    }
+/* ===============================
+   SCROLL TO SECTION
+================================ */
+function scrollToSection(id){
+    document.getElementById(id)
+    ?.scrollIntoView({behavior:"smooth"});
 }
-
-function endQuiz(){
-    clearInterval(timer);
-    document.getElementById("question").innerText=
-    "Final Score: "+score+"/"+quizData.length;
-
-    let message="Needs Improvement";
-    if(score>12)message="Excellent!";
-    else if(score>8)message="Good!";
-
-    document.getElementById("feedback").innerText=message;
-
-    let best=localStorage.getItem("bestScore")||0;
-    if(score>best){
-        localStorage.setItem("bestScore",score);
-        best=score;
-    }
-    document.getElementById("bestScore").innerText=
-    "Best Score: "+best;
-}
-
-function retakeQuiz(){
-    current=0;
-    score=0;
-    time=60;
-    startTimer();
-    loadQuestion();
-}
-
-function startTimer(){
-    clearInterval(timer);
-    timer=setInterval(()=>{
-        time--;
-        document.getElementById("timer").innerText="Time: "+time;
-        if(time<=0)endQuiz();
-    },1000);
-}
-
-loadQuestion();
-startTimer();
-
-document.getElementById("bestScore").innerText=
-"Best Score: "+(localStorage.getItem("bestScore")||0);
 
 </script>
+
 </body>
 </html>
+<!-- Cerebrum -->
+<div class="card" id="cerebrum">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the human cerebrum">
+<h3>Cerebrum</h3>
+<p><strong>Location & Structure:</strong> The cerebrum is the largest brain structure, occupying the uppermost part of the cranial cavity. It is divided into two hemispheres by the longitudinal fissure and covered by the cerebral cortex composed of gray matter, while the inner layer consists of white matter. The surface is folded into gyri and sulci, increasing surface area.</p>
+<p><strong>Functions:</strong> Responsible for voluntary motor control, sensory perception, reasoning, decision-making, language, emotion, and higher cognitive functions.</p>
+<p><strong>Clinical Significance:</strong> Damage may cause paralysis, aphasia, memory deficits, or personality changes. Strokes affecting cerebral arteries are common clinical concerns.</p>
+<p><strong>Interesting Facts:</strong> Despite being only ~2% of body weight, the cerebrum consumes ~20% of total energy.</p>
+</div>
+
+<!-- Cerebellum -->
+<div class="card" id="cerebellum">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the cerebellum">
+<h3>Cerebellum</h3>
+<p><strong>Location & Structure:</strong> Located below the cerebrum and behind the brainstem, the cerebellum has two hemispheres connected by the vermis. Its cortex contains tightly folded gray matter, and the underlying white matter forms a tree-like pattern called the arbor vitae.</p>
+<p><strong>Functions:</strong> Coordinates voluntary movements, maintains posture, balance, and motor learning.</p>
+<p><strong>Clinical Significance:</strong> Damage may cause ataxia, tremors, or difficulty in coordinating movements. Cerebellar strokes are less common but significant.</p>
+<p><strong>Interesting Facts:</strong> The cerebellum contains over 50% of all neurons in the brain despite being smaller than the cerebrum.</p>
+</div>
+
+<!-- Brainstem -->
+<div class="card" id="brainstem">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the brainstem">
+<h3>Brainstem</h3>
+<p><strong>Location & Structure:</strong> The brainstem connects the brain with the spinal cord and consists of the midbrain, pons, and medulla oblongata. It contains nuclei, fiber tracts, and cranial nerve origins.</p>
+<p><strong>Functions:</strong> Regulates heart rate, respiration, consciousness, and reflexes; relays motor and sensory signals between brain and body.</p>
+<p><strong>Clinical Significance:</strong> Brainstem lesions can cause life-threatening dysfunction, coma, or cranial nerve deficits.</p>
+<p><strong>Interesting Facts:</strong> The brainstem is evolutionarily the oldest part of the brain, responsible for basic life functions.</p>
+</div>
+
+<!-- Frontal Lobe -->
+<div class="card" id="frontal">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the frontal lobe">
+<h3>Frontal Lobe</h3>
+<p><strong>Location & Structure:</strong> Located at the front of the cerebrum, anterior to the central sulcus. It contains the prefrontal cortex, motor cortex, and Broca’s area in the left hemisphere.</p>
+<p><strong>Functions:</strong> Executive functions, planning, reasoning, voluntary movement, problem-solving, and speech production.</p>
+<p><strong>Clinical Significance:</strong> Damage can result in impaired judgment, personality changes, difficulty in planning, or expressive aphasia.</p>
+<p><strong>Interesting Facts:</strong> The frontal lobe continues developing into early adulthood, explaining the gradual maturation of executive functions.</p>
+</div>
+
+<!-- Parietal Lobe -->
+<div class="card" id="parietal">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the parietal lobe">
+<h3>Parietal Lobe</h3>
+<p><strong>Location & Structure:</strong> Positioned posterior to the frontal lobe, above the temporal lobe. The postcentral gyrus serves as the primary somatosensory cortex.</p>
+<p><strong>Functions:</strong> Processes touch, temperature, pain, spatial awareness, and integrates sensory information.</p>
+<p><strong>Clinical Significance:</strong> Lesions may cause sensory deficits, neglect syndrome, or impaired spatial orientation.</p>
+<p><strong>Interesting Facts:</strong> Plays a key role in mapping the body in space and coordinating hand-eye tasks.</p>
+</div>
+
+<!-- Temporal Lobe -->
+<div class="card" id="temporal">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the temporal lobe">
+<h3>Temporal Lobe</h3>
+<p><strong>Location & Structure:</strong> Located beneath the lateral sulcus on the sides of the cerebrum. Includes auditory cortex, hippocampus, and Wernicke’s area in the left hemisphere.</p>
+<p><strong>Functions:</strong> Auditory perception, language comprehension, memory formation, and emotional processing.</p>
+<p><strong>Clinical Significance:</strong> Damage can cause receptive aphasia, memory deficits, or auditory hallucinations.</p>
+<p><strong>Interesting Facts:</strong> Houses the hippocampus, essential for long-term memory consolidation.</p>
+</div>
+
+<!-- Occipital Lobe -->
+<div class="card" id="occipital">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the occipital lobe">
+<h3>Occipital Lobe</h3>
+<p><strong>Location & Structure:</strong> Situated at the back of the cerebrum, containing the primary visual cortex along the calcarine fissure.</p>
+<p><strong>Functions:</strong> Visual perception, color recognition, motion detection, and processing of visual information.</p>
+<p><strong>Clinical Significance:</strong> Lesions may result in blindness, visual field defects, or visual agnosia.</p>
+<p><strong>Interesting Facts:</strong> Despite its small size, it is crucial for interpreting the visual world.</p>
+</div>
+
+<!-- Thalamus -->
+<div class="card" id="thalamus">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the thalamus">
+<h3>Thalamus</h3>
+<p><strong>Location & Structure:</strong> A paired, egg-shaped structure deep within the diencephalon, located above the brainstem. Composed of multiple nuclei transmitting sensory and motor information.</p>
+<p><strong>Functions:</strong> Relays sensory signals to the cortex, regulates consciousness, sleep, and alertness.</p>
+<p><strong>Clinical Significance:</strong> Thalamic stroke may cause sensory loss, coma, or cognitive deficits.</p>
+<p><strong>Interesting Facts:</strong> Often referred to as the brain’s “relay station.”</p>
+</div>
+
+<!-- Hypothalamus -->
+<div class="card" id="hypothalamus">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the hypothalamus">
+<h3>Hypothalamus</h3>
+<p><strong>Location & Structure:</strong> Located below the thalamus, forming the floor of the third ventricle. Contains multiple nuclei controlling autonomic and endocrine functions.</p>
+<p><strong>Functions:</strong> Regulates hunger, thirst, body temperature, sleep-wake cycle, and hormone secretion via pituitary gland.</p>
+<p><strong>Clinical Significance:</strong> Lesions may cause hormonal imbalance, appetite disorders, or temperature dysregulation.</p>
+<p><strong>Interesting Facts:</strong> It is one of the smallest but most important brain structures for survival.</p>
+</div>
+
+<!-- Pituitary Gland -->
+<div class="card" id="pituitary">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the pituitary gland">
+<h3>Pituitary Gland</h3>
+<p><strong>Location & Structure:</strong> Small pea-sized gland at the base of the brain, connected to the hypothalamus by the pituitary stalk.</p>
+<p><strong>Functions:</strong> Master endocrine gland regulating growth, metabolism, reproduction, and stress response through hormone secretion.</p>
+<p><strong>Clinical Significance:</strong> Tumors can cause gigantism, Cushing’s disease, or hormonal imbalances.</p>
+<p><strong>Interesting Facts:</strong> Often called the “master gland” for controlling other endocrine glands.</p>
+</div>
+
+<!-- Corpus Callosum -->
+<div class="card" id="corpus">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the corpus callosum">
+<h3>Corpus Callosum</h3>
+<p><strong>Location & Structure:</strong> Thick bundle of nerve fibers connecting the left and right cerebral hemispheres. Composed of over 200 million axons.</p>
+<p><strong>Functions:</strong> Enables interhemispheric communication, coordination, and integration of cognitive functions.</p>
+<p><strong>Clinical Significance:</strong> Agenesis may cause split-brain syndrome or cognitive impairments.</p>
+<p><strong>Interesting Facts:</strong> Severing it in epilepsy patients can stop seizures but affects coordination between hemispheres.</p>
+</div>
+<!-- Neurons (Structure & Function) -->
+<div class="card" id="neurons">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of a neuron">
+<h3>Neurons (Structure & Function)</h3>
+<p><strong>Location & Structure:</strong> Neurons are the fundamental units of the brain and nervous system. Each neuron consists of a cell body (soma), dendrites that receive signals, and an axon that transmits impulses. Synaptic terminals connect neurons for communication via neurotransmitters.</p>
+<p><strong>Functions:</strong> Responsible for receiving, processing, and transmitting electrical and chemical signals throughout the body. Enable cognition, sensation, movement, and autonomic processes.</p>
+<p><strong>Clinical Significance:</strong> Damage to neurons or synapses can lead to neurodegenerative diseases like Alzheimer’s, Parkinson’s, or peripheral neuropathies.</p>
+<p><strong>Interesting Facts:</strong> The human brain contains ~86 billion neurons, each forming thousands of synapses, creating trillions of connections.</p>
+</div>
+
+<!-- Limbic System -->
+<div class="card" id="limbic">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the limbic system">
+<h3>Limbic System</h3>
+<p><strong>Location & Structure:</strong> Located deep within the cerebrum, including the hippocampus, amygdala, cingulate gyrus, and hypothalamus. It forms a ring around the thalamus.</p>
+<p><strong>Functions:</strong> Responsible for emotion, motivation, memory formation, and behavior regulation.</p>
+<p><strong>Clinical Significance:</strong> Damage may cause emotional disturbances, memory loss, or mood disorders.</p>
+<p><strong>Interesting Facts:</strong> Often called the "emotional brain" because it processes fear, pleasure, and social behaviors.</p>
+</div>
+
+<!-- Hippocampus -->
+<div class="card" id="hippocampus">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the hippocampus">
+<h3>Hippocampus</h3>
+<p><strong>Location & Structure:</strong> A seahorse-shaped structure within the temporal lobe. Composed of dense gray matter and curved layers called cornu ammonis.</p>
+<p><strong>Functions:</strong> Crucial for forming new memories and spatial navigation.</p>
+<p><strong>Clinical Significance:</strong> Damage leads to anterograde amnesia and difficulties in forming new memories.</p>
+<p><strong>Interesting Facts:</strong> One of the first regions affected in Alzheimer’s disease.</p>
+</div>
+
+<!-- Amygdala -->
+<div class="card" id="amygdala">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the amygdala">
+<h3>Amygdala</h3>
+<p><strong>Location & Structure:</strong> Almond-shaped clusters located in the medial temporal lobes. Consists of multiple nuclei connected to sensory pathways.</p>
+<p><strong>Functions:</strong> Processes fear, anxiety, emotional learning, and memory modulation.</p>
+<p><strong>Clinical Significance:</strong> Dysfunction may result in anxiety disorders, PTSD, or impaired emotional responses.</p>
+<p><strong>Interesting Facts:</strong> Known as the brain’s “fear center” but also important for positive emotions.</p>
+</div>
+
+<!-- Basal Ganglia -->
+<div class="card" id="basal">
+<img src="https://via.placeholder.com/600x220" alt="Diagram of the basal ganglia">
+<h3>Basal Ganglia</h3>
+<p><strong>Location & Structure:</strong> Deep gray matter nuclei including caudate, putamen, globus pallidus, subthalamic nucleus, and substantia nigra. Located near the lateral ventricles.</p>
+<p><strong>Functions:</strong> Controls voluntary movement, motor learning, habit formation, and procedural memory.</p>
+<p><strong>Clinical Significance:</strong> Parkinson’s disease and Huntington’s disease arise from basal ganglia dysfunction.</p>
+<p><strong>Interesting Facts:</strong> Plays a role in reward processing and habit formation beyond movement control.</p>
+</div>
+
+<!-- Broca's Area -->
+<div class="card" id="broca">
+<img src="https://via.placeholder.com/600x220" alt="Diagram showing Broca's area in the frontal lobe">
+<h3>Broca's Area</h3>
+<p><strong>Location & Structure:</strong> Located in the posterior part of the left frontal lobe, near the lateral sulcus. Composed of specialized cortical neurons.</p>
+<p><strong>Functions:</strong> Critical for speech production, articulation, and language processing.</p>
+<p><strong>Clinical Significance:</strong> Damage leads to expressive aphasia: understanding intact but difficulty speaking.</p>
+<p><strong>Interesting Facts:</strong> Named after Paul Broca, who discovered its role in speech in the 1860s.</p>
+</div>
+
+<!-- Wernicke's Area -->
+<div class="card" id="wernicke">
+<img src="https://via.placeholder.com/600x220" alt="Diagram showing Wernicke's area in the temporal lobe">
+<h3>Wernicke's Area</h3>
+<p><strong>Location & Structure:</strong> Located in the posterior section of the superior temporal gyrus in the left hemisphere. Rich in cortical neurons for auditory processing.</p>
+<p><strong>Functions:</strong> Language comprehension, processing spoken and written communication.</p>
+<p><strong>Clinical Significance:</strong> Damage causes receptive aphasia: speech fluent but meaning impaired.</p>
+<p><strong>Interesting Facts:</strong> Named after Carl Wernicke, a German neurologist who identified its role in comprehension.</p>
+</div>
+<div id="quiz-card" class="card" style="text-align:center; padding:30px;">
+  <h3 id="question-number">Question 1/15</h3>
+  <p id="question-text">Loading question...</p>
+  <div id="options" style="margin-top:20px;"></div>
+  <div id="feedback" style="margin-top:15px;font-weight:bold;"></div>
+  <div id="timer" style="margin-top:15px;">⏱ 60s</div>
+  <div id="progress" style="margin-top:15px;background:var(--accent);height:10px;border-radius:10px;">
+    <div id="progress-bar" style="height:100%; width:0%; background:var(--secondary); border-radius:10px;"></div>
+  </div>
+  <button id="next-btn" style="margin-top:20px;padding:10px 20px;border:none;border-radius:10px;background:var(--secondary);color:white;cursor:pointer;">Next</button>
+  <button id="retake-btn" style="margin-top:20px;padding:10px 20px;border:none;border-radius:10px;background:var(--primary);color:white;cursor:pointer;display:none;">Retake Quiz</button>
+  <p id="best-score" style="margin-top:15px;opacity:0.8;"></p>
+</div>
+
+<script>
+const quizData=[
+{
+  q:"Which lobe is responsible for voluntary movement and planning?",
+  a:["Temporal Lobe","Frontal Lobe","Parietal Lobe","Occipital Lobe"],
+  correct:"Frontal Lobe"
+},
+{
+  q:"Which structure is known as the brain’s relay station?",
+  a:["Hypothalamus","Thalamus","Amygdala","Cerebellum"],
+  correct:"Thalamus"
+},
+{
+  q:"Which lobe contains the primary visual cortex?",
+  a:["Occipital Lobe","Temporal Lobe","Parietal Lobe","Frontal Lobe"],
+  correct:"Occipital Lobe"
+},
+{
+  q:"Which structure regulates hunger, thirst, and body temperature?",
+  a:["Hypothalamus","Cerebellum","Corpus Callosum","Pituitary Gland"],
+  correct:"Hypothalamus"
+},
+{
+  q:"Damage to Broca’s area results in?",
+  a:["Expressive aphasia","Receptive aphasia","Memory loss","Motor impairment"],
+  correct:"Expressive aphasia"
+},
+{
+  q:"Which structure connects the two cerebral hemispheres?",
+  a:["Corpus Callosum","Basal Ganglia","Cerebellum","Thalamus"],
+  correct:"Corpus Callosum"
+},
+{
+  q:"Cerebellum is primarily responsible for?",
+  a:["Memory","Balance and coordination","Language comprehension","Emotions"],
+  correct:"Balance and coordination"
+},
+{
+  q:"Hippocampus is crucial for?",
+  a:["Fear processing","Motor control","Memory formation","Speech production"],
+  correct:"Memory formation"
+},
+{
+  q:"Which lobe processes touch, temperature, and spatial awareness?",
+  a:["Parietal Lobe","Frontal Lobe","Temporal Lobe","Occipital Lobe"],
+  correct:"Parietal Lobe"
+},
+{
+  q:"Amygdala is mainly associated with?",
+  a:["Emotion and fear","Vision","Movement","Language production"],
+  correct:"Emotion and fear"
+},
+{
+  q:"Wernicke’s area controls?",
+  a:["Speech comprehension","Speech production","Balance","Memory formation"],
+  correct:"Speech comprehension"
+},
+{
+  q:"Which structure is called the 'master gland'?",
+  a:["Pituitary Gland","Thalamus","Hypothalamus","Cerebrum"],
+  correct:"Pituitary Gland"
+},
+{
+  q:"Damage to the basal ganglia may cause?",
+  a:["Parkinson’s disease","Blindness","Aphasia","Amnesia"],
+  correct:"Parkinson’s disease"
+},
+{
+  q:"Neurons communicate using?",
+  a:["Electrical and chemical signals","Blood flow","Hormones only","Gravity"],
+  correct:"Electrical and chemical signals"
+},
+{
+  q:"Which lobe is located at the back of the brain?",
+  a:["Occipital Lobe","Frontal Lobe","Parietal Lobe","Temporal Lobe"],
+  correct:"Occipital Lobe"
+}
+];
+
+let current=0,score=0,timeLeft=60,bestScore=localStorage.getItem("bestScore")||0;
+const questionNumber=document.getElementById("question-number");
+const questionText=document.getElementById("question-text");
+const optionsDiv=document.getElementById("options");
+const feedback=document.getElementById("feedback");
+const timerDiv=document.getElementById("timer");
+const progressBar=document.getElementById("progress-bar");
+const nextBtn=document.getElementById("next-btn");
+const retakeBtn=document.getElementById("retake-btn");
+const bestScoreText=document.getElementById("best-score");
+
+bestScoreText.innerText="Best Score: "+bestScore;
+
+function loadQuestion(){
+  feedback.innerText="";
+  if(current>=quizData.length){
+    showResult(); return;
+  }
+  const q=quizData[current];
+  questionNumber.innerText=`Question ${current+1}/${quizData.length}`;
+  questionText.innerText=q.q;
+  optionsDiv.innerHTML="";
+  q.a.forEach(opt=>{
+    const btn=document.createElement("button");
+    btn.innerText=opt;
+    btn.style.margin="8px"; btn.style.padding="10px 14px";
+    btn.style.border="none"; btn.style.borderRadius="8px";
+    btn.style.cursor="pointer"; btn.style.background="#1565c0"; btn.style.color="white";
+    btn.onclick=()=>checkAnswer(opt);
+    optionsDiv.appendChild(btn);
+  });
+  timeLeft=60;
+  timerDiv.innerText=`⏱ ${timeLeft}s`;
+  startTimer();
+  progressBar.style.width=`${(current/quizData.length)*100}%`;
+}
+
+let timerInterval;
+function startTimer(){
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    timerDiv.innerText=`⏱ ${timeLeft}s`;
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      feedback.innerText="Time's up! Moving to next question.";
+      setTimeout(()=>{current++; loadQuestion();},1000);
+    }
+  },1000);
+}
+
+function checkAnswer(selected){
+  clearInterval(timerInterval);
+  const correct=quizData[current].correct;
+  if(selected===correct){
+    score++;
+    feedback.innerText="✅ Correct!";
+  } else {
+    feedback.innerText=`❌ Incorrect! Correct answer: ${correct}`;
+  }
+  nextBtn.style.display="inline-block";
+}
+
+nextBtn.onclick=()=>{
+  current++;
+  nextBtn.style.display="none";
+  loadQuestion();
+};
+
+retakeBtn.onclick=()=>{
+  current=0; score=0; retakeBtn.style.display="none"; nextBtn.style.display="inline-block";
+  loadQuestion();
+};
+
+function showResult(){
+  questionNumber.innerText="Quiz Completed!";
+  questionText.innerText=`Your Score: ${score}/${quizData.length}`;
+  optionsDiv.innerHTML="";
+  feedback.innerText="";
+  timerDiv.innerText="";
+  progressBar.style.width="100%";
+  nextBtn.style.display="none";
+  retakeBtn.style.display="inline-block";
+  let msg="";
+  if(score>=13) msg="Excellent!";
+  else if(score>=9) msg="Good!";
+  else msg="Needs Improvement!";
+  feedback.innerText=msg;
+
+  if(score>bestScore){
+    bestScore=score;
+    localStorage.setItem("bestScore",bestScore);
+  }
+  bestScoreText.innerText="Best Score: "+bestScore;
+}
+
+// Initial Load
+loadQuestion();
+
+</script>
