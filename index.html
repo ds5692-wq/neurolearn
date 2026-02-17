@@ -3,284 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroLearn Elite | Advanced Neural Mapping</title>
+    <title>NeuroLearn Elite | Professional Edition</title>
     <style>
         :root {
-            --bg: #0b0e14;
-            --card: #161b22;
-            --text: #e6edf3;
-            --accent: #00ffff;
+            --bg: #05070a;
+            --card: #0d1117;
+            --text: #f0f6fc;
+            --accent: #00d4ff;
+            --secondary: #30363d;
             --success: #238636;
-            --error: #da3633;
-            --secondary: #8b949e;
         }
 
         .light {
-            --bg: #f6f8fa;
-            --card: #ffffff;
+            --bg: #ffffff;
+            --card: #f6f8fa;
             --text: #1f2328;
             --accent: #0969da;
-            --secondary: #656d76;
         }
 
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: 0.3s;
-            line-height: 1.6;
         }
 
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
             border-bottom: 1px solid var(--secondary);
         }
 
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); text-transform: uppercase; }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
 
-        /* THE FIX: Image Mapping Container */
-        .explorer-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            text-align: center;
-            padding: 0 20px;
+        .explorer-section {
+            max-width: 1100px; margin: 40px auto; text-align: center; padding: 20px;
         }
 
-        .image-map {
+        /* FIXED CONTAINER: Anchors hotspots to the image */
+        .image-container {
             position: relative;
             display: inline-block;
             width: 100%;
-            max-width: 600px;
-            min-height: 400px; /* Prevents collapse if image fails */
-            background: #1c2128;
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 700px;
+            background: #000;
+            border-radius: 24px;
+            padding: 10px;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+            overflow: hidden;
         }
 
-        .image-map img {
+        .image-container img {
             width: 100%;
             display: block;
-            border-radius: 20px;
+            border-radius: 15px;
+            transition: filter 0.5s;
         }
 
-        /* HOTSPOTS */
         .hotspot {
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 22px; height: 22px;
             background: var(--accent);
             border: 3px solid #fff;
             border-radius: 50%;
             cursor: pointer;
             transform: translate(-50%, -50%);
-            z-index: 10;
-            transition: transform 0.2s;
+            z-index: 5;
+            box-shadow: 0 0 15px var(--accent);
         }
 
-        .hotspot:hover { transform: translate(-50%, -50%) scale(1.3); }
-
-        .hotspot::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%; height: 100%;
-            background: var(--accent);
-            border-radius: 50%;
+        .hotspot::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 100%; height: 100%; border-radius: 50%;
+            background: var(--accent); transform: translate(-50%, -50%);
             animation: pulse 2s infinite;
         }
 
         /* INFO PANEL */
         .info-panel {
-            margin-top: 30px;
-            padding: 30px;
-            background: var(--card);
-            border-radius: 15px;
-            border-top: 4px solid var(--accent);
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px; padding: 35px;
+            background: var(--card); border-radius: 20px;
+            border-left: 6px solid var(--accent);
+            text-align: left; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            min-height: 180px;
         }
-
-        /* QUIZ SYSTEM */
-        .quiz-section {
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 40px;
-            background: var(--card);
-            border-radius: 20px;
-        }
-
-        .opt-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin: 12px 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--secondary);
-            color: var(--text);
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(0,255,255,0.1); }
-        .correct { background: var(--success) !important; border-color: transparent; color: white; }
-        .wrong { background: var(--error) !important; border-color: transparent; color: white; }
 
         @keyframes pulse {
             0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
         }
+
+        .btn {
+            background: var(--accent); color: #000; border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">NeuroLearn Elite</div>
-    <div>
-        <button onclick="document.body.classList.toggle('light')" class="opt-btn" style="width:auto; padding:8px 15px; margin:0; display:inline-block;">🌓 Toggle Theme</button>
-    </div>
+    <div class="logo">🧠 NeuroLearn Elite</div>
+    <button class="btn" onclick="document.body.classList.toggle('light')">Theme</button>
 </nav>
 
-<div class="explorer-container">
-    <h1>Anatomical Brain Explorer</h1>
-    <p style="color:var(--secondary)">Click the pulsating nodes to learn about specific cortical regions.</p>
+<section class="explorer-section">
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Deep Brain Explorer</h1>
+    <p style="color: var(--secondary); margin-bottom: 40px;">Select a neural region to analyze its specific cognitive functions.</p>
 
-    <div class="image-map">
-        <img src="https://openclipart.org/image/800px/216010" alt="Brain Diagram" onerror="this.src='https://via.placeholder.com/600x400?text=Brain+Image+Failed+to+Load'">
+    <div class="image-container" id="brainContainer">
+        <img id="brainImg" src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=1000" 
+             alt="3D Brain Anatomy" onerror="handleImageError()">
 
-        <div class="hotspot" style="top: 30%; left: 30%;" onclick="updateInfo('frontal')"></div>
-        <div class="hotspot" style="top: 25%; left: 60%;" onclick="updateInfo('parietal')"></div>
-        <div class="hotspot" style="top: 55%; left: 85%;" onclick="updateInfo('occipital')"></div>
+        <div class="hotspot" style="top: 32%; left: 28%;" onclick="updateInfo('frontal')"></div>
+        <div class="hotspot" style="top: 25%; left: 62%;" onclick="updateInfo('parietal')"></div>
+        <div class="hotspot" style="top: 55%; left: 82%;" onclick="updateInfo('occipital')"></div>
         <div class="hotspot" style="top: 60%; left: 45%;" onclick="updateInfo('temporal')"></div>
-        <div class="hotspot" style="top: 82%; left: 75%;" onclick="updateInfo('cerebellum')"></div>
-        <div class="hotspot" style="top: 85%; left: 52%;" onclick="updateInfo('brainstem')"></div>
-        <div class="hotspot" style="top: 45%; left: 55%;" onclick="updateInfo('limbic')"></div>
+        <div class="hotspot" style="top: 80%; left: 78%;" onclick="updateInfo('cerebellum')"></div>
+        <div class="hotspot" style="top: 88%; left: 58%;" onclick="updateInfo('brainstem')"></div>
     </div>
 
-    <div class="info-panel" id="info-box">
-        <h2 style="color:var(--accent); margin-top:0">Interactive Neural Map</h2>
-        <p>Select a region on the brain above to display functional data and clinical significance.</p>
+    <div class="info-panel" id="infoPanel">
+        <h2 style="color: var(--accent); margin-top: 0;">System Ready</h2>
+        <p>Please click a pulsating node on the brain model to initiate anatomical data retrieval.</p>
     </div>
-</div>
-
-<div class="quiz-section">
-    <h2 id="q-title">Neural Mastery Test</h2>
-    <div id="quiz-container">
-        <p id="question" style="font-size: 1.2rem; font-weight: 600;"></p>
-        <div id="options"></div>
-    </div>
-    <div id="score-board" style="display:none; text-align:center;">
-        <h2 id="final-score"></h2>
-        <button onclick="location.reload()" class="opt-btn" style="text-align:center">Restart Training</button>
-    </div>
-</div>
+</section>
 
 <script>
-    const data = {
+    const neuralData = {
         frontal: {
             t: "Frontal Lobe",
-            d: "Located at the front of the brain, this area is the 'Executive Suite'. It manages complex tasks like planning, decision-making, personality expression, and moderate social behavior. It also contains the <strong>Motor Cortex</strong> for voluntary movement."
+            d: "The brain's 'Command Center'. Responsible for higher-level cognitive skills such as planning, reasoning, emotions, and personality. It also contains the Motor Cortex, which governs voluntary movement."
         },
         parietal: {
             t: "Parietal Lobe",
-            d: "Positioned near the top-middle, it integrates sensory information from various parts of the body. It processes spatial awareness, navigation, and 'proprioception' (sensing where your limbs are without looking)."
+            d: "The 'Sensory Integrator'. It processes information about touch, taste, and temperature. It is also crucial for spatial awareness—knowing where your body is in space."
         },
         occipital: {
             t: "Occipital Lobe",
-            d: "The visual processing center at the back of the brain. It decodes signals from your eyes into images, colors, and motion. Damage here can cause 'cortical blindness' even if the eyes work perfectly."
+            d: "The 'Visual Processing Center'. Located at the rear, it decodes signals from your eyes to interpret shapes, colors, and motion. Without it, you could see but not understand what you're looking at."
         },
         temporal: {
             t: "Temporal Lobe",
-            d: "Located behind the ears, this lobe is vital for processing auditory information (hearing) and language comprehension. It's also home to the <strong>Hippocampus</strong>, the factory for long-term memories."
+            d: "The 'Auditory and Memory Hub'. It processes sound and language. It's home to the Hippocampus, which acts like a hard drive for creating and storing long-term memories."
         },
         cerebellum: {
-            t: "Cerebellum (Little Brain)",
-            d: "Highly folded structure at the base. It doesn't initiate movement but fine-tunes it for accuracy and coordination. It is crucial for balance, posture, and learning motor skills like riding a bike."
+            t: "Cerebellum",
+            d: "Commonly called the 'Little Brain'. It contains more than half of your brain's neurons. Its main job is to coordinate precision, timing, and balance for smooth motor actions."
         },
         brainstem: {
             t: "Brainstem",
-            d: "The most primitive part of the brain. It controls automatic survival functions like your heartbeat, breathing, sleep cycles, and swallowing. It's the 'bridge' between the brain and spinal cord."
-        },
-        limbic: {
-            t: "Limbic System (Deep)",
-            d: "Hidden beneath the surface, this system includes the <strong>Amygdala</strong> (emotions like fear) and the <strong>Thalamus</strong> (the brain's relay station). It links higher brain functions with primitive emotions."
+            d: "The 'Life Support System'. It connects the brain to the spinal cord. It controls automatic survival functions like your heartbeat, breathing, and sleep cycles."
         }
     };
 
-    function updateInfo(id) {
-        const item = data[id];
-        document.getElementById('info-box').innerHTML = `
-            <h2 style="color:var(--accent); margin-top:0">${item.t}</h2>
-            <p>${item.d}</p>
-        `;
-        document.getElementById('info-box').scrollIntoView({behavior: 'smooth', block: 'center'});
-    }
-
-    const questions = [
-        { q: "Which lobe is responsible for personality and decision-making?", a: ["Frontal", "Occipital", "Parietal", "Temporal"], c: 0 },
-        { q: "The Hippocampus (Memory) is found in which lobe?", a: ["Frontal", "Occipital", "Parietal", "Temporal"], c: 3 },
-        { q: "Which part is critical for balance and fine motor coordination?", a: ["Brainstem", "Cerebellum", "Limbic System", "Occipital"], c: 1 },
-        { q: "If you have trouble recognizing faces, which lobe might be affected?", a: ["Parietal", "Frontal", "Temporal", "Occipital"], c: 2 },
-        { q: "Which region controls basic life functions like breathing?", a: ["Cerebellum", "Brainstem", "Limbic System", "Frontal"], c: 1 }
-    ];
-
-    let currentQ = 0;
-    let score = 0;
-
-    function loadQuestion() {
-        const q = questions[currentQ];
-        document.getElementById('question').innerText = q.q;
-        const optDiv = document.getElementById('options');
-        optDiv.innerHTML = '';
-        
-        q.a.forEach((text, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'opt-btn';
-            btn.innerText = text;
-            btn.onclick = () => checkAnswer(i, btn);
-            optDiv.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(idx, btn) {
-        const btns = document.querySelectorAll('.opt-btn');
-        btns.forEach(b => b.disabled = true);
-
-        if(idx === questions[currentQ].c) {
-            btn.classList.add('correct');
-            score++;
-        } else {
-            btn.classList.add('wrong');
-            btns[questions[currentQ].c].classList.add('correct');
-        }
-
+    function updateInfo(key) {
+        const info = neuralData[key];
+        const panel = document.getElementById('infoPanel');
+        panel.style.opacity = '0';
         setTimeout(() => {
-            currentQ++;
-            if(currentQ < questions.length) {
-                loadQuestion();
-            } else {
-                document.getElementById('quiz-container').style.display = 'none';
-                document.getElementById('score-board').style.display = 'block';
-                document.getElementById('final-score').innerText = `Training Complete: ${score} / ${questions.length}`;
-            }
-        }, 1500);
+            panel.innerHTML = `
+                <h2 style="color: var(--accent); margin-top: 0; font-size: 1.8rem;">${info.t}</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8;">${info.d}</p>
+            `;
+            panel.style.opacity = '1';
+        }, 200);
     }
 
-    loadQuestion();
+    function handleImageError() {
+        // Hides all hotspots if the image fails to load so it doesn't look messy
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(h => h.style.display = 'none');
+        document.getElementById('infoPanel').innerHTML = "<h2>Image Load Error</h2><p>Please check your internet connection or refresh the page.</p>";
+    }
 </script>
+
 </body>
 </html>
