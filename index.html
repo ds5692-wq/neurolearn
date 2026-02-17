@@ -2,156 +2,217 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroLearn - Interactive Brain</title>
+<title>NeuroLearn Elite</title>
 
 <style>
+:root {
+    --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    --card: rgba(0,0,0,0.6);
+    --text: white;
+    --accent: cyan;
+}
+
+.light {
+    --bg: #f4f7fa;
+    --card: white;
+    --text: #222;
+    --accent: #0077ff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: white;
-    text-align: center;
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition:0.4s;
+}
+
+/* NAVBAR */
+nav {
+    display:flex;
+    justify-content:space-between;
+    padding:15px 40px;
+    background:rgba(0,0,0,0.4);
+    position:sticky;
+    top:0;
+    backdrop-filter: blur(10px);
+}
+
+nav a {
+    color:var(--text);
+    text-decoration:none;
+    margin:0 15px;
+    font-weight:bold;
+}
+
+nav button {
+    background:var(--accent);
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* HERO */
+header {
+    text-align:center;
+    padding:40px 20px;
 }
 
 h1 {
-    margin-top: 20px;
-    font-size: 2.5em;
-    animation: fadeIn 2s ease-in-out;
+    font-size:2.8em;
 }
 
-.container {
-    padding: 20px;
+/* BRAIN */
+.brain-section {
+    text-align:center;
+    padding:20px;
 }
 
-.brain-img {
-    width: 300px;
-    max-width: 90%;
-    margin: 20px auto;
-    position: relative;
+.brain-wrapper {
+    position:relative;
+    display:inline-block;
 }
 
-.brain-img img {
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 0 20px cyan;
+.brain-wrapper img {
+    width:350px;
+    max-width:95%;
+    border-radius:20px;
+    box-shadow:0 0 40px var(--accent);
+    animation:glow 3s infinite alternate;
 }
 
-button {
-    margin: 10px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    background-color: cyan;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+/* HOTSPOTS */
+.hotspot {
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:var(--accent);
+    border-radius:50%;
+    cursor:pointer;
+    animation:pulse 2s infinite;
 }
 
-button:hover {
-    background-color: white;
-    transform: scale(1.05);
+.tooltip {
+    position:absolute;
+    background:var(--card);
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:12px;
+    display:none;
 }
 
+.hotspot:hover + .tooltip {
+    display:block;
+}
+
+/* INFO */
 .info-box {
-    margin: 20px auto;
-    width: 80%;
-    max-width: 500px;
-    padding: 15px;
-    background-color: rgba(0,0,0,0.6);
-    border-radius: 15px;
-    animation: fadeIn 1s ease-in-out;
+    margin:20px auto;
+    width:90%;
+    max-width:650px;
+    padding:15px;
+    background:var(--card);
+    border-radius:15px;
 }
 
+/* QUIZ */
 .quiz {
-    margin-top: 30px;
+    text-align:center;
+    padding:30px 20px;
 }
 
-#score {
-    font-size: 18px;
-    margin-top: 10px;
+.quiz button {
+    display:block;
+    margin:8px auto;
+    padding:8px 15px;
+    border:none;
+    border-radius:8px;
+    background:var(--accent);
+    cursor:pointer;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+/* ABOUT */
+.about {
+    padding:40px 20px;
+    text-align:center;
+}
+
+/* ANIMATIONS */
+@keyframes pulse {
+    0%{box-shadow:0 0 0 0 var(--accent);}
+    70%{box-shadow:0 0 0 12px transparent;}
+    100%{box-shadow:0 0 0 0 transparent;}
+}
+
+@keyframes glow {
+    from{box-shadow:0 0 20px var(--accent);}
+    to{box-shadow:0 0 60px var(--accent);}
+}
+
+/* MOBILE */
+@media(max-width:600px){
+    nav {flex-direction:column; align-items:center;}
+    h1 {font-size:2em;}
 }
 </style>
 </head>
 
 <body>
 
-<h1>🧠 NeuroLearn</h1>
-<p>Click a brain part to explore</p>
-
-<div class="container">
-
-<div class="brain-img">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Brain_human_lateral_view.png">
+<!-- NAVBAR -->
+<nav>
+<div><b>🧠 NeuroLearn</b></div>
+<div>
+<a href="#brain">Explore</a>
+<a href="#quiz">Quiz</a>
+<a href="#about">About</a>
+<button onclick="toggleTheme()">Theme</button>
 </div>
+</nav>
 
-<button onclick="showInfo('cerebrum')">Cerebrum</button>
-<button onclick="showInfo('cerebellum')">Cerebellum</button>
-<button onclick="showInfo('medulla')">Medulla</button>
+<!-- HERO -->
+<header>
+<h1>Interactive Brain Learning Platform</h1>
+<p>Explore • Learn • Test Yourself</p>
+</header>
+
+<!-- BRAIN SECTION -->
+<section id="brain" class="brain-section">
+
+<div class="brain-wrapper">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Brain_human_lateral_view.png">
+
+<div class="hotspot" style="top:30%;left:55%;" onclick="showInfo('frontal')"></div>
+<div class="tooltip" style="top:25%;left:60%;">Frontal Lobe</div>
+
+<div class="hotspot" style="top:45%;left:70%;" onclick="showInfo('temporal')"></div>
+<div class="tooltip" style="top:40%;left:75%;">Temporal Lobe</div>
+
+<div class="hotspot" style="top:60%;left:75%;" onclick="showInfo('cerebellum')"></div>
+<div class="tooltip" style="top:55%;left:80%;">Cerebellum</div>
+
+</div>
 
 <div class="info-box" id="info">
-Information will appear here.
+Click a glowing point to learn about a brain part.
 </div>
 
-<div class="quiz">
-<h2>Quick Quiz</h2>
-<p>Which part controls breathing?</p>
+</section>
 
-<button onclick="checkAnswer('wrong')">Cerebrum</button>
-<button onclick="checkAnswer('wrong')">Cerebellum</button>
-<button onclick="checkAnswer('correct')">Medulla</button>
+<!-- QUIZ -->
+<section id="quiz" class="quiz">
+<h2>Brain Quiz - Level 1</h2>
+
+<p id="question">Which part controls balance?</p>
+<button onclick="checkAnswer('wrong')">Frontal Lobe</button>
+<button onclick="checkAnswer('correct')">Cerebellum</button>
+<button onclick="checkAnswer('wrong')">Temporal Lobe</button>
 
 <p id="result"></p>
 <p id="score">Score: 0</p>
-</div>
-
-</div>
-
-<audio id="clickSound">
-<source src="https://www.soundjay.com/buttons/sounds/button-16.mp3">
-</audio>
-
-<script>
-let score = 0;
-
-function playSound() {
-    document.getElementById("clickSound").play();
-}
-
-function showInfo(part) {
-    playSound();
-    let text = "";
-
-    if (part === "cerebrum") {
-        text = "Cerebrum: Controls thinking, memory, intelligence and voluntary actions.";
-    }
-    else if (part === "cerebellum") {
-        text = "Cerebellum: Maintains balance and coordinates muscles.";
-    }
-    else if (part === "medulla") {
-        text = "Medulla Oblongata: Controls breathing, heartbeat and reflex actions.";
-    }
-
-    document.getElementById("info").innerHTML = text;
-}
-
-function checkAnswer(answer) {
-    playSound();
-    if (answer === "correct") {
-        document.getElementById("result").innerHTML = "✅ Correct!";
-        score++;
-    } else {
-        document.getElementById("result").innerHTML = "❌ Try Again!";
-    }
-
-    document.getElementById("score").innerHTML = "Score: " + score;
-}
-</script>
-
-</body>
-</html>
+</sect
